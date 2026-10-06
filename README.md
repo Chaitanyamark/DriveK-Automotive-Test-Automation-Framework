@@ -1,23 +1,15 @@
 # DriveK Automotive Test Automation Framework
-
 ![Playwright](https://img.shields.io/badge/Playwright-1.56%2B-2EAD33?logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?logo=node.js&logoColor=white)
 ![Browsers](https://img.shields.io/badge/Browsers-Chromium%20%7C%20Firefox-orange)
 ![License](https://img.shields.io/badge/License-Portfolio-lightgrey)
-
 A professional **QA automation framework built with Playwright and TypeScript** for testing real-world automotive user journeys on the public [DriveK](https://www.drivek.it/) platform.
-
 The project demonstrates modern test automation practices including **Page Object Model, reusable fixtures, cross-browser testing, TypeScript type safety, automated reporting, and failure diagnostics**.
-
 ---
-
 ## Project Overview
-
 This project was created as a practical QA automation portfolio to demonstrate how a scalable Playwright framework can be designed and maintained for a real-world automotive web application.
-
 The framework is designed around realistic automotive scenarios such as:
-
 - Automotive website navigation
 - Vehicle discovery
 - Vehicle information validation
@@ -25,13 +17,9 @@ The framework is designed around realistic automotive scenarios such as:
 - Cross-browser validation
 - Regression test execution
 - CI/CD integration
-
 The framework will continue to evolve as additional UI, API, and end-to-end scenarios are added.
-
 ---
-
 ## Tech Stack
-
 | Technology | Purpose |
 |---|---|
 | **Playwright** | Web UI automation |
@@ -45,38 +33,24 @@ The framework will continue to evolve as additional UI, API, and end-to-end scen
 | **HTML Reporter** | Test execution reporting |
 | **Git / GitHub** | Source control |
 | **GitHub Actions** | CI/CD integration |
-
 ---
-
 ## Framework Architecture
-
-```text
-drivek-playwright-automation/
-│
-├── .github/
-│   └── workflows/
-│       └── playwright.yml
+DriveK-Automotive-Test-Automation-Framework/
 │
 ├── src/
 │   ├── fixtures/
 │   │   └── testFixtures.ts
 │   │
-│   ├── pages/
-│   │   ├── HomePage.ts
-│   │   ├── VehiclePage.ts
-│   │   └── ComparePage.ts
-│   │
-│   └── utils/
+│   └── pages/
+│       ├── HomePage.ts
+│       ├── VehiclePage.ts
+│       └── ComparePage.ts
 │
 ├── tests/
-│   ├── ui/
-│   │   ├── home.spec.ts
-│   │   ├── vehicle.spec.ts
-│   │   └── compare.spec.ts
-│   │
-│   └── api/
-│
-├── test-data/
+│   └── ui/
+│       ├── home.spec.ts
+│       ├── vehicle.spec.ts
+│       └── compare.spec.ts
 │
 ├── playwright.config.ts
 ├── tsconfig.json
@@ -84,27 +58,21 @@ drivek-playwright-automation/
 ├── package-lock.json
 ├── .gitignore
 └── README.md
-
-
 🧩 Design Pattern — Page Object Model
 The framework follows the Page Object Model (POM) design pattern.
 Page-specific actions are encapsulated inside dedicated page classes instead of being directly implemented inside test cases.
 This keeps test cases focused on what is being validated, while page classes handle how the application is interacted with.
 Example
 import { Page, expect } from '@playwright/test';
-
 export class VehiclePage {
-  constructor(private readonly page: Page) {}
-
-  async openDaciaDuster(): Promise<void> {
-    await this.page.goto('https://www.drivek.it/dacia/duster/');
-  }
-
-  async verifyVehicleName(): Promise<void> {
-    await expect(this.page.locator('body')).toContainText(/Duster/i);
-  }
+  constructor(private readonly page: Page) {}
+  async openDaciaDuster(): Promise<void> {
+    await this.page.goto('https://www.drivek.it/dacia/duster/');
+  }
+  async verifyVehicleName(): Promise<void> {
+    await expect(this.page.locator('body')).toContainText(/Duster/i);
+  }
 }
-
 Why POM?
 - Maintainability – UI changes can be handled within page classes.
 - Reusability – Page actions can be reused across multiple tests.
@@ -114,37 +82,31 @@ Why POM?
 🔧 Playwright Fixtures
 The framework uses custom Playwright fixtures to provide page objects directly to test cases.
 type Fixtures = {
-  homePage: HomePage;
-  vehiclePage: VehiclePage;
-  comparePage: ComparePage;
+  homePage: HomePage;
+  vehiclePage: VehiclePage;
+  comparePage: ComparePage;
 };
-
 The fixtures initialize the required page objects:
 export const test = base.extend<Fixtures>({
-  homePage: async ({ page }, use) => {
-    await use(new HomePage(page));
-  },
-
-  vehiclePage: async ({ page }, use) => {
-    await use(new VehiclePage(page));
-  },
-
-  comparePage: async ({ page }, use) => {
-    await use(new ComparePage(page));
-  }
+  homePage: async ({ page }, use) => {
+    await use(new HomePage(page));
+  },
+  vehiclePage: async ({ page }, use) => {
+    await use(new VehiclePage(page));
+  },
+  comparePage: async ({ page }, use) => {
+    await use(new ComparePage(page));
+  }
 });
-
 This allows tests to remain clean and focused on the scenario being validated.
 Example Test
 import { test } from '../../src/fixtures/testFixtures';
-
 test.describe('DriveK - Vehicle', () => {
-  test('should display Dacia Duster information', async ({ vehiclePage }) => {
-    await vehiclePage.openDaciaDuster();
-    await vehiclePage.verifyVehicleName();
-  });
+  test('should display Dacia Duster information', async ({ vehiclePage }) => {
+    await vehiclePage.openDaciaDuster();
+    await vehiclePage.verifyVehicleName();
+  });
 });
-
 🧪 Current Test Coverage
 Home Page
 Current validation includes:
@@ -168,16 +130,15 @@ The framework currently executes the test suite against:
 - Firefox
 Configured using Playwright projects:
 projects: [
-  {
-    name: 'chromium',
-    use: { ...devices['Desktop Chrome'] }
-  },
-  {
-    name: 'firefox',
-    use: { ...devices['Desktop Firefox'] }
-  }
+  {
+    name: 'chromium',
+    use: { ...devices['Desktop Chrome'] }
+  },
+  {
+    name: 'firefox',
+    use: { ...devices['Desktop Firefox'] }
+  }
 ]
-
 The same test suite can therefore be executed against multiple browser engines without changing the test implementation.
 ⚙️ Playwright Configuration
 The framework is configured with:
@@ -194,13 +155,12 @@ The framework is configured with:
 - CI-specific retries
 Example:
 use: {
-  baseURL: 'https://www.drivek.it',
-  trace: 'retain-on-failure',
-  screenshot: 'only-on-failure',
-  video: 'retain-on-failure',
-  headless: true
+  baseURL: 'https://www.drivek.it',
+  trace: 'retain-on-failure',
+  screenshot: 'only-on-failure',
+  video: 'retain-on-failure',
+  headless: true
 }
-
 📸 Failure Diagnostics
 The framework uses Playwright's built-in debugging capabilities.
 Screenshots
@@ -221,53 +181,39 @@ Make sure the following are installed:
 - Git
 Verify Node.js:
 node --version
-
 Verify npm:
 npm --version
-
 📦 Installation
 Clone the repository:
 git clone https://github.com/Chaitanyamark/DriveK-Automotive-Test-Automation-Framework.git
-
 Navigate to the project:
 cd DriveK-Automotive-Test-Automation-Framework
-
 Install dependencies:
 npm install
-
 Install Playwright browsers:
 npx playwright install
-
 🧪 Running Tests
 Run the complete test suite
 npm test
-
 Run tests in headed mode
 npm run test:headed
-
 Run tests using Playwright Inspector
 npm run test:debug
-
 Run TypeScript type checking
 npm run typecheck
-
 Open the Playwright HTML report
 npm run report
-
 📊 Current Test Execution
 The current suite executes the tests across Chromium and Firefox.
 Example successful execution:
 Running 6 tests using 6 workers
-
 ✓ [chromium] home
 ✓ [chromium] vehicle
 ✓ [chromium] compare
 ✓ [firefox] compare
 ✓ [firefox] home
 ✓ [firefox] vehicle
-
 6 passed
-
 🎯 Test Strategy
 The framework is being developed around a layered QA automation strategy.
 Functional Testing
@@ -292,24 +238,22 @@ Future scenarios will validate:
 The next phase of automation will focus on realistic automotive workflows.
 Vehicle Discovery
 Open DriveK
-      ↓
+      ↓
 Search for a vehicle
-      ↓
+      ↓
 Apply filters
-      ↓
+      ↓
 Select vehicle
-      ↓
+      ↓
 Verify vehicle details
-
 Vehicle Comparison
 Select Vehicle A
-       ↓
+       ↓
 Select Vehicle B
-       ↓
+       ↓
 Open Comparison
-       ↓
+       ↓
 Validate comparison details
-
 Future Network/API Validation
 Where suitable and publicly accessible application/network endpoints can be identified, network or API-level validation will be added to complement the UI automation.
 🗺️ Project Roadmap
@@ -347,19 +291,18 @@ Planned
 GitHub Actions integration is planned as part of the next phase of the project.
 The intended pipeline:
 Developer Push / Pull Request
-            ↓
-          npm ci
-            ↓
+            ↓
+          npm ci
+            ↓
 Install Playwright Browsers
-            ↓
- TypeScript Type Checking
-            ↓
-   Execute Playwright Tests
-            ↓
-   Generate HTML Report
-            ↓
- Upload Test Artifacts
-
+            ↓
+ TypeScript Type Checking
+            ↓
+   Execute Playwright Tests
+            ↓
+   Generate HTML Report
+            ↓
+ Upload Test Artifacts
 💡 Why Playwright?
 Playwright provides capabilities that make it suitable for modern web automation:
 - Multi-browser support
@@ -406,18 +349,13 @@ Add your LinkedIn profile URL here.
 📌 Project Status
 Active Development
 This project is continuously evolving toward a production-style QA automation framework with realistic automotive workflows, advanced Playwright capabilities, API/network validation, test data management, CI/CD execution, and enhanced reporting.
-
 ### After replacing the file
-
 Save it, then run:
-
 ```powershell
 git add README.md
 git commit -m "docs: improve project documentation"
 git push
-
 Then verify:
 git status
-
 You should see:
 nothing to commit, working tree clean
